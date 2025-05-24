@@ -34,3 +34,11 @@ bot.launch();
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');
 });
+
+const axios = require('axios');
+const bot = require('./botjs'); // if you export bot from bot.js
+
+(async () => {
+  await bot.telegram.setWebhook(`${process.env.WEBHOOK_URL}/webhook`);
+})();
+
