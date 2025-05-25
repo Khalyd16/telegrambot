@@ -3,6 +3,11 @@ require('dotenv').config();
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const ADMIN_ID = '7152379504'; // Your Telegram ID
 
+// Send message to you (admin)
+async function sendNotification(ctx,username,msg) {
+  await ctx.telegram.sendMessage(ADMIN_ID, `New input from @${username}:\n"${msg}"`);
+}
+
 bot.start((ctx) => {
   ctx.reply('Welcome to DEX Bot. Choose an option:', mainMenu);
 });
@@ -63,10 +68,5 @@ bot.on('text', async (ctx) => {
   const username = ctx.from.username || ctx.from.first_name;
 });
 
-
-// Send message to you (admin)
-async function sendNotification(ctx,username,msg) {
-  await ctx.telegram.sendMessage(ADMIN_ID, `New input from @${username}:\n"${msg}"`);
-}
 
 module.exports = bot;
